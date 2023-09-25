@@ -28,7 +28,7 @@ switch ($metodo) {
         re.nro_registro_maestro, 
         re.nro_reserva, 
         re.nombre, 
-        r.nro_personas, 
+        re.nro_personas, 
         re.fecha_llegada, 
         re.fecha_salida
         FROM habitaciones h
@@ -37,7 +37,7 @@ switch ($metodo) {
         LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND CURDATE() BETWEEN re.fecha_llegada AND re.fecha_salida
         LEFT JOIN productos p ON p.id_producto = h.id_producto
         WHERE h.id_unidad_de_negocio = 3
-        GROUP BY ch.id_checkin, h.nro_habitacion
+        GROUP BY  h.nro_habitacion
         ORDER BY h.nro_habitacion ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {

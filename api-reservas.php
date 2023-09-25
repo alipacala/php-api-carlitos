@@ -10,13 +10,8 @@ $responseData = array(
 
 switch ($metodo) {
     case 'GET':
-        $codigo = json_decode(file_get_contents('php://input'), true);
-        $sql = "SELECT * FROM reservahabitaciones";
-        if (isset($_GET["codigo"])) {
-            $codigo = $_GET["codigo"];
-            $sql .= " WHERE nro_reserva = '$codigo'";
-        }
-
+        $codigo = $_GET["nro_reserva"];
+        $sql = "SELECT * FROM reservahabitaciones  WHERE nro_reserva = '$codigo'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -32,6 +27,7 @@ switch ($metodo) {
                 echo "No se encontraron reservas!";
             }
         }
+       
         break;
     case 'GET2':
         if (isset($_GET['codigo'])) {
