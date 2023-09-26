@@ -27,7 +27,7 @@ switch ($metodo) {
         h.nro_habitacion, 
         re.nro_registro_maestro, 
         re.nro_reserva, 
-        re.nombre, 
+        ch.nombre, 
         re.nro_personas, 
         re.fecha_llegada, 
         re.fecha_salida
@@ -59,7 +59,7 @@ switch ($metodo) {
             COALESCE(h.nro_habitacion, '') AS nro_habitacion,
             COALESCE(re.nro_registro_maestro, '') AS nro_registro_maestro,
             COALESCE(re.nro_reserva, '') AS nro_reserva,
-            COALESCE(re.nombre, '') AS nombre,
+            COALESCE(ch.nombre, '') AS nombre,
             COALESCE(re.nro_personas, '') AS nro_personas,
             COALESCE(re.fecha_llegada, '') AS fecha_llegada,
             COALESCE(re.fecha_salida, '') AS fecha_salida

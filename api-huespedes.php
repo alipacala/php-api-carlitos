@@ -507,61 +507,85 @@ switch ($metodo) {
         $tipo_documento_comprobante = $data['tipo_documento_comprobante'];
         $sexo = $data['sexo'];
         // Insertar en la tabla checking 
-        $insert_huesped_query = "UPDATE cheking
-        SET
-            tipo_de_servicio = '$tipo_de_servicio',
-            nro_adultos = '$nro_adultos',
-            nro_ninos = '$nro_ninos',
-            nombre = '$nombre',
-            lugar_procedencia = '$lugar_de_nacimiento',
-            telefono = '$celular',
-            fecha_in = '$fecha_in',
-            fecha_out = '$fecha_out',
-            nro_reserva = '$nro_reserva',
-            nro_registro_maestro = '$nro_registro',
-            estacionamiento = '$estacionamiento',
-            hora_in = '$hora_in',
-            hora_out = '$hora_out',
-            nro_placa = '$nro_placa',
-            nro_documento = '$nro_documento',
-            tipo_documento = '$tipo_documento',
-            forma_pago = '$forma_pago',
-            nro_personas = '$nro_personas',
-            nro_habitacion = '$nro_habitacion',
-            direccion_comprobante = '$direccion_comprobante',
-            nro_documento_comprobante = '$nro_documento_comprobante',
-            razon_social = '$razon_social',
-            tipo_comprobante = '$tipo_comprobante',
-            tipo_documento_comprobante = '$tipo_documento_comprobante',
-            sexo = '$sexo'
-        WHERE nro_reserva = '$nro_reserva'";
+        $tipo_persona = 0;
+        $nacionalidad = 'NA';
+        $pais = 'NA';
+        $id_usuario_creacion = 0;
+        $fecha_creacion = date('Y-m-d');
+        $sql2 = "INSERT INTO personanaturaljuridica (
+            tipo_persona, tipo_documento, nro_documento, apellidos, nombres,
+            sexo, lugar_de_nacimiento, fecha, edad, nacionalidad, ocupacion, direccion,
+            ciudad, pais, celular, email, id_usuario_creacion, fecha_creacion
+        ) VALUES (
+            '$tipo_persona', '$tipo_documento', '$nro_documento', '$apellidos', '$nombres',
+            '$sexo', '$lugar_de_nacimiento', '$fecha_nacimiento', '$edad', '$nacionalidad', '$ocupacion', '$direccion',
+            '$ciudad', '$pais', '$celular', '$email', '$id_usuario_creacion', '$fecha_creacion'
+        )";
+        //ejecutamos la consulta de sql2 con un if
+        if($conn->query($sql2) == TRUE){
+            $id_persona = $conn->insert_id;
+                $insert_huesped_query = "UPDATE cheking
+                SET
+                    id_persona = '$id_persona',
+                    nombres = '$nombre',
+                    tipo_de_servicio = '$tipo_de_servicio',
+                    nro_adultos = '$nro_adultos',
+                    nro_ninos = '$nro_ninos',
+                    nombre = '$nombre',
+                    lugar_procedencia = '$lugar_de_nacimiento',
+                    telefono = '$celular',
+                    fecha_in = '$fecha_in',
+                    fecha_out = '$fecha_out',
+                    nro_reserva = '$nro_reserva',
+                    nro_registro_maestro = '$nro_registro',
+                    estacionamiento = '$estacionamiento',
+                    hora_in = '$hora_in',
+                    hora_out = '$hora_out',
+                    nro_placa = '$nro_placa',
+                    nro_documento = '$nro_documento',
+                    tipo_documento = '$tipo_documento',
+                    forma_pago = '$forma_pago',
+                    nro_personas = '$nro_personas',
+                    nro_habitacion = '$nro_habitacion',
+                    direccion_comprobante = '$direccion_comprobante',
+                    nro_documento_comprobante = '$nro_documento_comprobante',
+                    razon_social = '$razon_social',
+                    tipo_comprobante = '$tipo_comprobante',
+                    tipo_documento_comprobante = '$tipo_documento_comprobante',
+                    sexo = '$sexo'
+                WHERE nro_reserva = '$nro_reserva'";
 
-        if ($conn->query($insert_huesped_query) === TRUE) {
-            $nro_de_orden_unico = 0;
-            $nro_documento2 = $nro_documento;
-            $acompanantes = $data['acompanantes'];
-            foreach($acompanantes as $item){
-                $apellidos_y_nombres = $item['nombre'];
-                $edad = $item['edad'];
-                $sexo = $item['sexo'];
-                $parentesco = $item['parentesco'];
-                $insert_acopanantes_query = "INSERT INTO acompanantes (
-                    nro_registro_maestro, tipo_de_servicio, nro_de_orden_unico, nro_documento, nro_habitacion, apellidos_y_nombres, sexo, edad, parentesco
-                ) VALUES (
-                    '$nro_registro_maestro', '$tipo_de_servicio', '$nro_de_orden_unico', '$nro_documento2', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
-                )";
-                $nro_documento2 = "";
-                $nro_de_orden_unico++;
-                 if ($conn->query($insert_acopanantes_query) === TRUE) {
-                    echo "se inserto acompañante" . $nro_de_orden_unico;
+                if ($conn->query($insert_huesped_query) === TRUE) {
+                    $nro_de_orden_unico = 0;
+                    $nro_documento2 = $nro_documento;
+                    $acompanantes = $data['acompanantes'];
+                    foreach($acompanantes as $item){
+                        $apellidos_y_nombres = $item['nombre'];
+                        $edad = $item['edad'];
+                        $sexo = $item['sexo'];
+                        $parentesco = $item['parentesco'];
+                        $insert_acopanantes_query = "INSERT INTO acompanantes (
+                            nro_registro_maestro, tipo_de_servicio, nro_de_orden_unico, nro_documento, nro_habitacion, apellidos_y_nombres, sexo, edad, parentesco
+                        ) VALUES (
+                            '$nro_registro', '$tipo_de_servicio', '$nro_de_orden_unico', '$nro_documento2', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
+                        )";
+                        $nro_documento2 = "";
+                        $nro_de_orden_unico++;
+                        if ($conn->query($insert_acopanantes_query) === TRUE) {
+                            echo "se inserto acompañante" . $nro_de_orden_unico;
+                        } else {
+                            echo "Error insertando en la tabla acompanantes: " . $conn->error;
+                        }
+                    }
+
                 } else {
-                    echo "Error insertando en la tabla acompanantes: " . $conn->error;
+                    echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
                 }
-            }
-
-        } else {
-            echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
+        }else{
+            echo "Error: " . $sql2 . "<br>" . $conn->error;
         }
+        
+        break;
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'), true);
         $id_profesional = $data['id_profesional'];

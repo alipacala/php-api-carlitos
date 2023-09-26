@@ -61,10 +61,12 @@ switch ($metodo) {
             echo "No se encontraron productos.";
         }
     break;
-    case 'GET4':
+    case 'GET5':
         if (isset($_GET['codigo'])) {
             $codigo = $_GET['codigo'];
-            $sql = "SELECT * FROM reservas WHERE nro_registro_maestro = '$codigo'";
+            $sql = "SELECT * FROM cheking ch
+            INNER JOIN personanaturaljuridica p ON ch.id_persona = p.id_persona
+            WHERE ch.nro_reserva = '$codigo'";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $modulos = array();
