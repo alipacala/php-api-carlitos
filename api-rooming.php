@@ -25,16 +25,16 @@ switch ($metodo) {
         $sql = "SELECT 
         p.nombre_producto, 
         h.nro_habitacion, 
-        re.nro_registro_maestro, 
-        re.nro_reserva, 
+        ch.nro_registro_maestro, 
+        ch.nro_reserva, 
         ch.nombre, 
-        re.nro_personas, 
-        re.fecha_llegada, 
-        re.fecha_salida
+        ch.nro_personas, 
+        ch.fecha_in, 
+        ch.fecha_out
         FROM habitaciones h
         LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
         LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin
-        LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND CURDATE() BETWEEN re.fecha_llegada AND re.fecha_salida
+        LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND CURDATE() BETWEEN ch.fecha_in AND ch.fecha_out
         LEFT JOIN productos p ON p.id_producto = h.id_producto
         WHERE h.id_unidad_de_negocio = 3
         GROUP BY  h.nro_habitacion
@@ -57,16 +57,16 @@ switch ($metodo) {
             $sql = "SELECT
             COALESCE(p.nombre_producto, '') AS nombre_producto,
             COALESCE(h.nro_habitacion, '') AS nro_habitacion,
-            COALESCE(re.nro_registro_maestro, '') AS nro_registro_maestro,
-            COALESCE(re.nro_reserva, '') AS nro_reserva,
+            COALESCE(ch.nro_registro_maestro, '') AS nro_registro_maestro,
+            COALESCE(ch.nro_reserva, '') AS nro_reserva,
             COALESCE(ch.nombre, '') AS nombre,
-            COALESCE(re.nro_personas, '') AS nro_personas,
-            COALESCE(re.fecha_llegada, '') AS fecha_llegada,
-            COALESCE(re.fecha_salida, '') AS fecha_salida
+            COALESCE(ch.nro_personas, '') AS nro_personas,
+            COALESCE(ch.fecha_in, '') AS fecha_llegada,
+            COALESCE(ch.fecha_out, '') AS fecha_salida
             FROM habitaciones h
             LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
             LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin
-            LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND '$fecha' BETWEEN re.fecha_llegada AND re.fecha_salida
+            LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND '$fecha' BETWEEN ch.fecha_in AND ch.fecha_out
             LEFT JOIN productos p ON p.id_producto = h.id_producto
             WHERE h.id_unidad_de_negocio = 3
             GROUP BY h.nro_habitacion

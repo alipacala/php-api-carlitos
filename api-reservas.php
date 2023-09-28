@@ -331,9 +331,9 @@ switch ($metodo) {
     estado_pago = 1
     WHERE nro_reserva = '$nro_reserva'";
         if ($conn->query($sql) === TRUE) {
-            $sql2 = "SELECT  r.nombre, r.lugar_procedencia, r.id_modalidad, r.id_unidad_de_negocio, r.nro_registro_maestro, r.nro_reserva, rh.precio_unitario FROM reservas r
+            $sql2 = "SELECT  r.nombre, r.lugar_procedencia, r.id_modalidad, r.id_unidad_de_negocio, r.nro_registro_maestro, r.nro_reserva, rh.precio_unitario, r.nro_personas, r.fecha_llegada, r.hora_llegada, r.fecha_salida FROM reservas r
             INNER JOIN reservahabitaciones rh ON rh.nro_reserva = r.nro_reserva
-            WHERE r.nro_reserva = '$nro_reserva'";
+            WHERE r.nro_reserva =  '$nro_reserva'";
                 $result2 = $conn->query($sql2);
                 if ($result2->num_rows > 0) {
                 $row2 = $result2->fetch_assoc();
@@ -343,8 +343,10 @@ switch ($metodo) {
                 $nombre = $row2["nombre"];
                 $lugar_procedencia = $row2["lugar_procedencia"];
                 $id_modalidad = $row2["id_modalidad"];
-                $fecha_in2 = date('Y-m-d');
-                $hora_in2 = date('H:i:s');
+                $nro_personas = $row2["nro_personas"];
+                $fecha_in2 = $row2["fecha_llegada"];
+                $hora_in2 = $row2["hora_llegada"];
+                $fecha_out2 = $row2["fecha_salida"];
                 $valor = $row2["precio_unitario"];
                 
                 $insert_checking = "INSERT INTO cheking (
@@ -355,8 +357,10 @@ switch ($metodo) {
                     nombre,
                     lugar_procedencia,
                     id_modalidad,
+                    nro_personas,
                     fecha_in,
-                    hora_in
+                    hora_in,
+                    fecha_out
                 ) VALUES (
                 '$id_unidad_de_negocio',
                 '$nro_registro_maestro',
@@ -364,9 +368,11 @@ switch ($metodo) {
                 '$nro_reserva',
                 '$nombre',
                 '$lugar_procedencia',
+                '$nro_personas',
                 '$id_modalidad',
                 '$fecha_in2',
-                '$hora_in2'
+                '$hora_in2',
+                '$fecha_out2'
                 )";
                 if ($conn->query($insert_checking) === TRUE) {
                     $id_checkin = $conn->insert_id;
