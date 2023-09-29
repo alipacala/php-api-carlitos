@@ -61,8 +61,8 @@ switch ($metodo) {
             COALESCE(ch.nro_reserva, '') AS nro_reserva,
             COALESCE(ch.nombre, '') AS nombre,
             COALESCE(ch.nro_personas, '') AS nro_personas,
-            COALESCE(ch.fecha_in, '') AS fecha_llegada,
-            COALESCE(ch.fecha_out, '') AS fecha_salida
+            COALESCE(ch.fecha_in, '') AS fecha_in,
+            COALESCE(ch.fecha_out, '') AS fecha_out
             FROM habitaciones h
             LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
             LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin

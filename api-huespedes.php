@@ -513,13 +513,43 @@ switch ($metodo) {
         $id_usuario_creacion = 0;
         $fecha_creacion = date('Y-m-d');
         $sql2 = "INSERT INTO personanaturaljuridica (
-            tipo_persona, tipo_documento, nro_documento, apellidos, nombres,
-            sexo, lugar_de_nacimiento, fecha, edad, nacionalidad, ocupacion, direccion,
-            ciudad, pais, celular, email, id_usuario_creacion, fecha_creacion
+            tipo_persona,
+            tipo_documento,
+            nro_documento,
+            apellidos,
+            nombres,
+            sexo,
+            lugar_de_nacimiento,
+            fecha,
+            edad,
+            nacionalidad,
+            ocupacion,
+            direccion,
+            ciudad,
+            pais,
+            celular,
+            email,
+            id_usuario_creacion,
+            fecha_creacion
         ) VALUES (
-            '$tipo_persona', '$tipo_documento', '$nro_documento', '$apellidos', '$nombres',
-            '$sexo', '$lugar_de_nacimiento', '$fecha_nacimiento', '$edad', '$nacionalidad', '$ocupacion', '$direccion',
-            '$ciudad', '$pais', '$celular', '$email', '$id_usuario_creacion', '$fecha_creacion'
+            '$tipo_persona',
+            '$tipo_documento',
+            '$nro_documento',
+            '$apellidos',
+            '$nombres',
+            '$sexo',
+            '$lugar_de_nacimiento',
+            '$fecha_nacimiento',
+            '$edad',
+            '$nacionalidad',
+            '$ocupacion',
+            '$direccion',
+            '$ciudad',
+            '$pais',
+            '$celular',
+            '$email',
+            '$id_usuario_creacion',
+            '$fecha_creacion'
         )";
         //ejecutamos la consulta de sql2 con un if
         if($conn->query($sql2) == TRUE){
@@ -527,7 +557,6 @@ switch ($metodo) {
                 $insert_huesped_query = "UPDATE cheking
                 SET
                     id_persona = '$id_persona',
-                    nombres = '$nombre',
                     tipo_de_servicio = '$tipo_de_servicio',
                     nro_adultos = '$nro_adultos',
                     nro_ninos = '$nro_ninos',
