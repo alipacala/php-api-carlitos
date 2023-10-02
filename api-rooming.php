@@ -20,6 +20,7 @@ switch ($metodo) {
             echo "No se encontraron grupo modulos.";
         }
         break;
+        
     case 'INNER':
         // Listar unidaddenegocio
         $sql = "SELECT 
