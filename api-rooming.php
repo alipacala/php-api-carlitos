@@ -32,14 +32,14 @@ switch ($metodo) {
         ch.nro_personas, 
         ch.fecha_in, 
         ch.fecha_out
-        FROM habitaciones h
-        LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
-        LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin
-        LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND CURDATE() BETWEEN ch.fecha_in AND ch.fecha_out
-        LEFT JOIN productos p ON p.id_producto = h.id_producto
-        WHERE h.id_unidad_de_negocio = 3
-        GROUP BY  h.nro_habitacion
-        ORDER BY h.nro_habitacion ASC";
+    FROM habitaciones h
+    LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
+    LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin AND CURDATE() BETWEEN ch.fecha_in AND ch.fecha_out
+    LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro 
+    LEFT JOIN productos p ON p.id_producto = h.id_producto
+    WHERE h.id_unidad_de_negocio = 3 
+    GROUP BY h.nro_habitacion
+    ORDER BY h.nro_habitacion ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $modulos = array();
@@ -66,8 +66,8 @@ switch ($metodo) {
             COALESCE(ch.fecha_out, '') AS fecha_out
             FROM habitaciones h
             LEFT JOIN rooming r ON r.nro_habitacion = h.nro_habitacion
-            LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin
-            LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro  AND '$fecha' BETWEEN ch.fecha_in AND ch.fecha_out
+            LEFT JOIN cheking ch ON ch.id_checkin = r.id_checkin  AND '$fecha' BETWEEN ch.fecha_in AND ch.fecha_out
+            LEFT JOIN reservas re ON ch.nro_registro_maestro = re.nro_registro_maestro 
             LEFT JOIN productos p ON p.id_producto = h.id_producto
             WHERE h.id_unidad_de_negocio = 3
             GROUP BY h.nro_habitacion

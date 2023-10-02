@@ -84,6 +84,7 @@ switch ($metodo) {
                 tipo_de_servicio,
                 id_unidad_de_negocio,
                 nro_adultos,
+                nro_infantes,
                 nro_ninos,
                 nombre,
                 id_persona,
@@ -112,6 +113,7 @@ switch ($metodo) {
                 '$tipo_de_servicio',
                 '$id_unidad_de_negocio',
                 '$nro_adultos',
+                '$nro_infantes',
                 '$nro_ninos',
                 '$nombre',
                 '$id_persona',
@@ -283,6 +285,7 @@ switch ($metodo) {
                         tipo_de_servicio,
                         id_unidad_de_negocio,
                         nro_adultos,
+                        nro_infantes,
                         nro_ninos,
                         nombre,
                         id_persona,
@@ -311,6 +314,7 @@ switch ($metodo) {
                         '$tipo_de_servicio',
                         '$id_unidad_de_negocio',
                         '$nro_adultos',
+                        '$nro_infantes',
                         '$nro_ninos',
                         '$nombre',
                         '$id_persona',
@@ -594,7 +598,15 @@ switch ($metodo) {
                         $sexo = $item['sexo'];
                         $parentesco = $item['parentesco'];
                         $insert_acopanantes_query = "INSERT INTO acompanantes (
-                            nro_registro_maestro, tipo_de_servicio, nro_de_orden_unico, nro_documento, nro_habitacion, apellidos_y_nombres, sexo, edad, parentesco
+                            nro_registro_maestro,
+                            tipo_de_servicio,
+                            nro_de_orden_unico,
+                            nro_documento,
+                            nro_habitacion,
+                            apellidos_y_nombres,
+                            sexo,
+                            edad,
+                            parentesco
                         ) VALUES (
                             '$nro_registro', '$tipo_de_servicio', '$nro_de_orden_unico', '$nro_documento2', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
                         )";

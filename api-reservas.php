@@ -65,18 +65,51 @@ switch ($metodo) {
         if (isset($_GET['codigo'])) {
             $codigo = $_GET['codigo'];
             $codigo2 = $_GET['codigo2'];
-            $sql = "SELECT *,
+            $codigo3 = $_GET['codigo3'];
+            $sql = "SELECT ch.tipo_documento,
+            ch.nro_documento,
+            p.apellidos,
+            p.nombres,
+            p.lugar_de_nacimiento,
+            p.fecha,
+            p.edad,
+            p.sexo,
+            p.ocupacion,
+            p.direccion,
+            ch.lugar_procedencia,
+            ch.telefono,
+            p.email,
+            ch.estacionamiento,
+            ch.nro_placa,
+            ro.nro_habitacion,
+            pr.nombre_producto,
+            ro.tarifa,
+            ch.fecha_in,
+            ch.fecha_out,
+            ch.hora_in,
+            ch.hora_out,
+            ch.forma_pago,
+            ch.tipo_comprobante,
+            ch.tipo_documento_comprobante,
+            ch.nro_documento_comprobante,
+            ch.razon_social,
+            ch.nro_ninos,
+            ch.nro_adultos,
+            ch.nro_infantes,
+            ch.nro_personas,
+            ch.direccion_comprobante,
             CASE
-              WHEN pr.precio_venta_01 = re.precio_unitario THEN 'Precio Normal'
-              WHEN pr.precio_venta_02 = re.precio_unitario THEN 'Precio Corporativo'
-              WHEN pr.precio_venta_03 = re.precio_unitario THEN 'Precio Cliente Premium'
-              ELSE 'Precio Booking'
+                WHEN pr.precio_venta_01 = ro.tarifa THEN 'Precio Normal'
+                WHEN pr.precio_venta_02 = ro.tarifa THEN 'Precio Corporativo'
+                WHEN pr.precio_venta_03 = ro.tarifa THEN 'Precio Cliente Premium'
+                ELSE 'Precio Booking'
             END AS tipo_precio
-          FROM cheking ch
-          INNER JOIN personanaturaljuridica p ON ch.id_persona = p.id_persona
-          LEFT JOIN reservahabitaciones re ON re.nro_reserva = ch.nro_reserva
-          LEFT JOIN productos pr ON re.id_producto = pr.id_producto
-          WHERE ch.nro_reserva = '$codigo' AND re.nro_habitacion = '$codigo2'";
+            FROM cheking ch
+            INNER JOIN personanaturaljuridica p ON ch.id_persona = p.id_persona
+            LEFT JOIN rooming ro ON ro.nro_registro_maestro = ch.nro_registro_maestro
+            LEFT JOIN productos pr ON ro.id_producto = pr.id_producto
+            WHERE ch.nro_registro_maestro = '$codigo3' AND ro.nro_habitacion = '$codigo2'
+            GROUP BY ch.nro_registro_maestro";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $modulos = array();
