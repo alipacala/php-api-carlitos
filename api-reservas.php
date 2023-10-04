@@ -49,7 +49,7 @@ switch ($metodo) {
         }
     break;
     case 'GET3':
-        $sql = "SELECT nombre_producto FROM productos WHERE tipo = 'SVH'";
+        $sql = "SELECT id_producto, nombre_producto FROM productos WHERE tipo = 'SVH'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $modulos = array();

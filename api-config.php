@@ -7,7 +7,7 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 
 switch ($metodo) {
     case 'GET':
-        // Listar unidaddenegocio
+        // Listar correlativos del config
         $sql = "SELECT * FROM config";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
