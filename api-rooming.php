@@ -24,6 +24,7 @@ switch ($metodo) {
     case 'INNER':
         // Listar unidaddenegocio
         $sql = "SELECT 
+        ch.id_checkin,
         p.nombre_producto, 
         h.nro_habitacion, 
         ch.nro_registro_maestro, 
@@ -56,6 +57,7 @@ switch ($metodo) {
             $fecha = $data['fecha'];
             // Listar unidaddenegocio
             $sql = "SELECT
+            COALESCE(ch.id_checkin, '') AS id_checkin,
             COALESCE(p.nombre_producto, '') AS nombre_producto,
             COALESCE(h.nro_habitacion, '') AS nro_habitacion,
             COALESCE(ch.nro_registro_maestro, '') AS nro_registro_maestro,
@@ -101,6 +103,7 @@ switch ($metodo) {
         break;
     case 'PUT':
         // Actualizar modulos
+         $data = json_decode(file_get_contents('php://input'), true);
         $data = json_decode(file_get_contents('php://input'), true);
         $id_grupo_modulo = $data['id_grupo_modulo'];
         $nombre_grupo_modulo = $data['nombre_grupo_modulo'];
@@ -115,6 +118,92 @@ switch ($metodo) {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
         break;
+        case 'FECHA':
+            // Actualizar modulos
+            $data = json_decode(file_get_contents('php://input'), true);
+            $codigo = $data['codigo'];
+            $fechasJson = $data['fechasJson'];
+
+            // Convierte los objetos JSON en un array de fechas
+            // Realiza una consulta SQL para verificar las fechas en la tabla rooming
+            $sql = "SELECT DISTINCT * FROM rooming WHERE id_checkin = '$codigo'";
+            $resultado = $conn->query($sql);
+
+            if (!$resultado) {
+                die("Error en la consulta: " . $conn->error);
+            }
+
+            $fechasExistentes = array();
+            //almcenare las en variables los datos de la consulta
+            $id_checkin = "";
+            $id_producto = "";
+            $nro_habitacion = "";
+            $nro_registro_maestro = "";
+            $hora = "12:00:00";
+            $nro_personas = "";
+            $tarifa = "";
+            $estado = "";        
+            while ($fila = $resultado->fetch_assoc()) {
+                $fechasExistentes[] = $fila['fecha'];
+                $id_checkin = $fila['id_checkin'];
+                $id_producto = $fila['id_producto'];
+                $nro_habitacion = $fila['nro_habitacion'];
+                $nro_registro_maestro = $fila['nro_registro_maestro'];
+                $nro_personas = $fila['nro_personas'];
+                $tarifa = $fila['tarifa'];
+                $estado = $fila['estado'];
+            }
+
+            // Compara las fechas recibidas con las fechas existentes y ajusta la tabla
+           // Comparar las fechas existentes con las fechas enviadas y eliminar las no presentes
+           foreach ($fechasExistentes as $fechaExistente) {
+            if (!in_array($fechaExistente, array_column($fechasJson, 'fecha'))) {
+                    // La fecha existe en la base de datos pero no en el rango enviado, así que la eliminamos
+                    $sqlDelete = "DELETE FROM rooming WHERE id_checkin = '$codigo' AND fecha = '$fechaExistente'";
+                    if ($conn->query($sqlDelete) !== TRUE) {
+                        // Error al eliminar la fecha
+                        http_response_code(500);
+                        echo json_encode(array('error' => 'Error al eliminar fecha en la base de datos.'));
+                        exit();
+                    }
+                }
+            }
+             // Procesa las fechas y realiza las operaciones en la base de datos
+            foreach ($fechasJson as $fechaObj) {
+                $fecha = $fechaObj['fecha'];
+                // Inserta o actualiza los datos en la tabla 'rooming' según tus necesidades
+                if (!in_array($fecha, $fechasExistentes)) {
+                    // La fecha no existe en la base de datos, así que la insertamos
+                    $sql = "INSERT INTO rooming (
+                    id_checkin,
+                    nro_registro_maestro,
+                    nro_habitacion,
+                    id_producto,
+                    fecha,
+                    hora,
+                    nro_personas,
+                    tarifa,
+                    estado)
+                    VALUES (
+                    '$id_checkin', 
+                    '$nro_registro_maestro', 
+                    '$nro_habitacion', 
+                    '$id_producto', 
+                    '$fecha', 
+                    '$hora', 
+                    '$nro_personas', 
+                    '$tarifa', 
+                    '$estado')";
+                    if ($conn->query($sql) !== TRUE) {
+                        // Error al insertar el registro
+                        http_response_code(500);
+                        echo json_encode(array('error' => 'Error al insertar fecha en la base de datos.'));
+                        exit();
+                    }
+                }
+                
+            }
+            break;
     case 'DELETE':
         // Eliminar unidaddenegocio
         $data = json_decode(file_get_contents('php://input'), true);

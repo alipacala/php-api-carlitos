@@ -64,12 +64,14 @@ switch ($metodo) {
     case 'GET5':
         if (isset($_GET['codigo'])) {
             $codigo = $_GET['codigo'];
-            $codigo2 = $_GET['codigo2'];
-            $codigo3 = $_GET['codigo3'];
-            $sql = "SELECT ch.tipo_documento,
+            $sql = "SELECT 
+            ch.nro_registro_maestro,
+            ch.nro_reserva,
+            ch.tipo_documento,
             ch.nro_documento,
+            p.id_persona,
             p.apellidos,
-            p.nombres,
+            ch.nombre,
             p.lugar_de_nacimiento,
             p.fecha,
             p.edad,
@@ -105,10 +107,10 @@ switch ($metodo) {
                 ELSE 'Precio Booking'
             END AS tipo_precio
             FROM cheking ch
-            INNER JOIN personanaturaljuridica p ON ch.id_persona = p.id_persona
+            LEFT JOIN personanaturaljuridica p ON ch.id_persona = p.id_persona
             LEFT JOIN rooming ro ON ro.nro_registro_maestro = ch.nro_registro_maestro
             LEFT JOIN productos pr ON ro.id_producto = pr.id_producto
-            WHERE ch.nro_registro_maestro = '$codigo3' AND ro.nro_habitacion = '$codigo2'
+            WHERE ch.id_checkin = '$codigo'
             GROUP BY ch.nro_registro_maestro";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
