@@ -61,15 +61,15 @@ switch ($metodo) {
                 '$precio_total',
                 '$nro_personas'
             )";
-             if ($conn->query($sql) === TRUE) {
+            if ($conn->query($sql) === TRUE) {
                 echo "Nuevo reservahabitaciones insertado exitosamente.";
             } else {
                 echo "Error: " . $sql . "<br>" . $conn->error;
             }
         }
-        
-        
-        
+
+
+
         break;
     case 'PUT':
         // Actualizar modulos

@@ -32,7 +32,6 @@ switch ($metodo) {
         }
         break;
     case 'POST':
-        // Insertar nueva unidaddenegocio
         $data = json_decode(file_get_contents('php://input'), true);
         // Extract data from the $data array and assign them to variables
         $tipo_de_servicio = "HOTEL";
@@ -61,7 +60,7 @@ switch ($metodo) {
         $valor = $data['valor'];
         $nro_placa = $data['nro_placa'];
         $nombre = $apellidos . " " . $nombres;
-        $forma_pago  = $data['forma_pago'];
+        $forma_pago = $data['forma_pago'];
         $nro_adultos = $data['nro_adultos'];
         $nro_ninos = $data['nro_nino'];
         $nro_infantes = $data['nro_infantes'];
@@ -76,7 +75,7 @@ switch ($metodo) {
         $sql = "SELECT * FROM personanaturaljuridica WHERE nro_documento = '$nro_documento'";
         $result = $conn->query($sql);
         //condicionamos un if con la variable result para ver si encontro nro_documento
-        if($result->num_rows > 0){
+        if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $id_persona = $row["id_persona"];
             // Insertar en la tabla checking 
@@ -142,36 +141,36 @@ switch ($metodo) {
 
             if ($conn->query($insert_huesped_query) === TRUE) {
                 $id_checkin = $conn->insert_id;
-                            $sqlupdate = "UPDATE rooming SET id_checkin = '$id_checkin' WHERE nro_registro_maestro = '$nro_registro' AND nro_habitacion = '$nro_habitacion'";
-                            if($conn->query($sqlupdate) == TRUE){
-                                echo "se actualizo el rooming";
-                            }else{
-                                echo "Error: " . $sqlupdate . "<br>" . $conn->error;
-                            }
+                $sqlupdate = "UPDATE rooming SET id_checkin = '$id_checkin' WHERE nro_registro_maestro = '$nro_registro' AND nro_habitacion = '$nro_habitacion'";
+                if ($conn->query($sqlupdate) == TRUE) {
+                    echo "se actualizo el rooming";
+                } else {
+                    echo "Error: " . $sqlupdate . "<br>" . $conn->error;
+                }
                 $ano_peru = date('y');
-                $codigo = "HT". $ano_peru;
+                $codigo = "HT" . $ano_peru;
                 actualizarNumeroCorrelativoHotel($codigo);
                 $acompanantes = $data['acompanantes'];
                 $nro_documento2 = $nro_documento;
                 $nro_de_orden_unico = 0;
                 echo json_encode($acompanantes);
-                    foreach($acompanantes as $nro_de_orden_unico => $item3){
-                        $apellidos_y_nombres = $item3['nombre'];
-                        $edad = $item3['edad'];
-                        $sexo = $item3['sexo'];
-                        $parentesco = $item3['parentesco'];
-                        $insert_acopanantes_query = "INSERT INTO acompanantes (
+                foreach ($acompanantes as $nro_de_orden_unico => $item3) {
+                    $apellidos_y_nombres = $item3['nombre'];
+                    $edad = $item3['edad'];
+                    $sexo = $item3['sexo'];
+                    $parentesco = $item3['parentesco'];
+                    $insert_acopanantes_query = "INSERT INTO acompanantes (
                             nro_registro_maestro, nro_documento, tipo_de_servicio, nro_de_orden_unico, nro_habitacion, apellidos_y_nombres, sexo, edad, parentesco
                         ) VALUES (
                             '$nro_registro', '$nro_documento2','$tipo_de_servicio', '$nro_de_orden_unico', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
                         )";
-                        $nro_documento2 = "";
-                        //comprobar si se inserto los datos en la tabla acompanantes
-                        $resulto = $conn->query($insert_acopanantes_query);
-                        // Incrementar $nro_de_orden_unico aquí, después de insertar el registro
-                        $nro_de_orden_unico++;
-                    }
-                    if ($resulto === TRUE) {
+                    $nro_documento2 = "";
+                    //comprobar si se inserto los datos en la tabla acompanantes
+                    $resulto = $conn->query($insert_acopanantes_query);
+                    // Incrementar $nro_de_orden_unico aquí, después de insertar el registro
+                    $nro_de_orden_unico++;
+                }
+                if ($resulto === TRUE) {
                     //comprobar si se inserto los datos en la tabla rooming
                     $id_producto = obtenerProductoconhabitacion($nro_habitacion);
                     $fechaLlegada = new DateTime($fecha_in);
@@ -189,7 +188,7 @@ switch ($metodo) {
                         // Cambiamos la hora de llegada a '12:00' para las siguientes filas de la misma habitación
                         $hora = '12:00';
                     }
-                    foreach ($fechasArray as $item){
+                    foreach ($fechasArray as $item) {
                         $fecha = $item['fecha'];
                         $horaLlegada = $item['horaLlegada'];
                         $insert_rooming = "INSERT INTO rooming (
@@ -253,7 +252,7 @@ switch ($metodo) {
                         $resulto2 = $conn->query($insert_rooming);
                         $resulto3 = $conn->query($insert_documento_detalle);
                         //comprobar si se inserto los datos en la tabla rooming
-                        
+
                     }
                     if ($resulto2 === TRUE) {
                         echo "se inserto dentro del rooming <br>";
@@ -261,7 +260,7 @@ switch ($metodo) {
                     } else {
                         echo "Error: " . $insert_rooming . "<br>" . $conn->error;
                     }
-                            
+
                 } else {
                     echo "Error insertando en la tabla acompanantes: " . $conn->error;
                 }
@@ -284,10 +283,10 @@ switch ($metodo) {
                 '$sexo', '$lugar_de_nacimiento', '$fecha_nacimiento', '$edad', '$nacionalidad', '$ocupacion', '$direccion',
                 '$ciudad', '$pais', '$celular', '$email', '$id_usuario_creacion', '$fecha_creacion'
             )";
-                if ($conn->query($sql2) === TRUE) {
-                    $id_persona = $conn->insert_id;
-                    // Insertar en la tabla checking
-                    $insert_huesped_query = "INSERT INTO cheking (
+            if ($conn->query($sql2) === TRUE) {
+                $id_persona = $conn->insert_id;
+                // Insertar en la tabla checking
+                $insert_huesped_query = "INSERT INTO cheking (
                         tipo_de_servicio,
                         id_unidad_de_negocio,
                         nro_adultos,
@@ -345,59 +344,59 @@ switch ($metodo) {
                         '$tipo_comprobante',
                         '$tipo_documento_comprobante',
                         '$sexo'
-                    )";        
-        
-                    if ($conn->query($insert_huesped_query) === TRUE) {
-                        $id_checkin = $conn->insert_id;
-                        $sqlupdate = "UPDATE rooming SET id_checkin = '$id_checkin' WHERE nro_registro_maestro = '$nro_registro' AND nro_habitacion = '$nro_habitacion'";
-                        if($conn->query($sqlupdate) == TRUE){
-                            echo "se actualizo el rooming";
-                        }else{
-                            echo "Error: " . $sqlupdate . "<br>" . $conn->error;
-                        }
-                        $ano_peru = date('y');
-                        $codigo = "HT". $ano_peru;
-                        $nro_documento2 = $nro_documento;
-                        actualizarNumeroCorrelativoHotel($codigo);
-                        $acompanantes = $data['acompanantes'];
-                        foreach($acompanantes as $nro_de_orden_unico => $item3){
-                            $apellidos_y_nombres = $item3['nombre'];
-                            $edad = $item3['edad'];
-                            $sexo = $item3['sexo'];
-                            $parentesco = $item3['parentesco'];
-                            $insert_acopanantes_query = "INSERT INTO acompanantes (
+                    )";
+
+                if ($conn->query($insert_huesped_query) === TRUE) {
+                    $id_checkin = $conn->insert_id;
+                    $sqlupdate = "UPDATE rooming SET id_checkin = '$id_checkin' WHERE nro_registro_maestro = '$nro_registro' AND nro_habitacion = '$nro_habitacion'";
+                    if ($conn->query($sqlupdate) == TRUE) {
+                        echo "se actualizo el rooming";
+                    } else {
+                        echo "Error: " . $sqlupdate . "<br>" . $conn->error;
+                    }
+                    $ano_peru = date('y');
+                    $codigo = "HT" . $ano_peru;
+                    $nro_documento2 = $nro_documento;
+                    actualizarNumeroCorrelativoHotel($codigo);
+                    $acompanantes = $data['acompanantes'];
+                    foreach ($acompanantes as $nro_de_orden_unico => $item3) {
+                        $apellidos_y_nombres = $item3['nombre'];
+                        $edad = $item3['edad'];
+                        $sexo = $item3['sexo'];
+                        $parentesco = $item3['parentesco'];
+                        $insert_acopanantes_query = "INSERT INTO acompanantes (
                                 nro_registro_maestro, nro_documento, tipo_de_servicio, nro_de_orden_unico, nro_habitacion, apellidos_y_nombres, sexo, edad, parentesco
                             ) VALUES (
                                 '$nro_registro', '$nro_documento2','$tipo_de_servicio', '$nro_de_orden_unico', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
                             )";
-                            $nro_documento2 = "";
-                             //comprobar si se inserto los datos en la tabla acompanantes
-                             $resulto = $conn->query($insert_acopanantes_query);
-                            // Incrementar $nro_de_orden_unico aquí, después de insertar el registro
-                            $nro_de_orden_unico++;
+                        $nro_documento2 = "";
+                        //comprobar si se inserto los datos en la tabla acompanantes
+                        $resulto = $conn->query($insert_acopanantes_query);
+                        // Incrementar $nro_de_orden_unico aquí, después de insertar el registro
+                        $nro_de_orden_unico++;
+                    }
+                    if ($resulto === TRUE) {
+                        //comprobar si se inserto los datos en la tabla rooming
+                        $id_producto = obtenerProductoconhabitacion($nro_habitacion);
+                        $fechaLlegada = new DateTime($fecha_in);
+                        $fechaSalida = new DateTime($fecha_out);
+                        $hora = $hora_in;
+                        $estado = 'NA';
+                        $fechasArray = array(); // Creamos un array para almacenar las fechas y horas de llegada
+
+                        for ($fecha = clone $fechaLlegada; $fecha < $fechaSalida; $fecha->modify('+1 day')) {
+                            $fechaFormateada = $fecha->format('Y-m-d');
+                            $fechasArray[] = array(
+                                'fecha' => $fechaFormateada,
+                                'horaLlegada' => $hora
+                            );
+                            // Cambiamos la hora de llegada a '12:00' para las siguientes filas de la misma habitación
+                            $hora = '12:00';
                         }
-                        if ($resulto === TRUE) {
-                            //comprobar si se inserto los datos en la tabla rooming
-                            $id_producto = obtenerProductoconhabitacion($nro_habitacion);
-                            $fechaLlegada = new DateTime($fecha_in);
-                            $fechaSalida = new DateTime($fecha_out);
-                            $hora = $hora_in;
-                            $estado = 'NA';
-                            $fechasArray = array(); // Creamos un array para almacenar las fechas y horas de llegada
-        
-                            for ($fecha = clone $fechaLlegada; $fecha < $fechaSalida; $fecha->modify('+1 day')) {
-                                $fechaFormateada = $fecha->format('Y-m-d');
-                                $fechasArray[] = array(
-                                    'fecha' => $fechaFormateada,
-                                    'horaLlegada' => $hora
-                                );
-                                // Cambiamos la hora de llegada a '12:00' para las siguientes filas de la misma habitación
-                                $hora = '12:00';
-                            }
-                            foreach ($fechasArray as $item){
-                                $fecha = $item['fecha'];
-                                $horaLlegada = $item['horaLlegada'];
-                                $insert_rooming = "INSERT INTO rooming (
+                        foreach ($fechasArray as $item) {
+                            $fecha = $item['fecha'];
+                            $horaLlegada = $item['horaLlegada'];
+                            $insert_rooming = "INSERT INTO rooming (
                                     id_checkin,
                                     nro_registro_maestro,
                                     nro_habitacion,
@@ -418,16 +417,16 @@ switch ($metodo) {
                                     '$valor',
                                     '$estado'
                                 )";
-                                
-                                //aqui insertaremos los datos de documento detalle
-                                $tipo_movimiento = 'SA';
-                                $nivel_descargo = 1;
-                                $cantidad = 1;
-                                $tipo_de_unidad = 'UNID';
-                                $precio_unitario = $valor;
-                                $precio_total = $valor;
-                                $fecha_hora_registro = date('Y-m-d H:i:s');
-                                $insert_documento_detalle = "INSERT INTO documento_detalle (
+
+                            //aqui insertaremos los datos de documento detalle
+                            $tipo_movimiento = 'SA';
+                            $nivel_descargo = 1;
+                            $cantidad = 1;
+                            $tipo_de_unidad = 'UNID';
+                            $precio_unitario = $valor;
+                            $precio_total = $valor;
+                            $fecha_hora_registro = date('Y-m-d H:i:s');
+                            $insert_documento_detalle = "INSERT INTO documento_detalle (
                                     tipo_movimiento,
                                     nro_registro_maestro,
                                     fecha,
@@ -456,28 +455,28 @@ switch ($metodo) {
                                     '1',
                                     '$fecha_hora_registro'
                                 )";
-                                $resulto2 = $conn->query($insert_rooming);
-                                $resulto3 = $conn->query($insert_documento_detalle);
-                                
-                            }
-                            //comprobar si se inserto los datos en la tabla rooming
-                            if ($resulto2 === TRUE) {
-                                echo "se inserto dentro del if";
-                                echo "<br>";
-                            } else {
-                                echo "Error: " . $insert_rooming . "<br>" . $conn->error;
-                            }       
-                        } else {
-                            echo "Error insertando en la tabla acompanantes: " . $conn->error;
+                            $resulto2 = $conn->query($insert_rooming);
+                            $resulto3 = $conn->query($insert_documento_detalle);
+
                         }
-                       
+                        //comprobar si se inserto los datos en la tabla rooming
+                        if ($resulto2 === TRUE) {
+                            echo "se inserto dentro del if";
+                            echo "<br>";
+                        } else {
+                            echo "Error: " . $insert_rooming . "<br>" . $conn->error;
+                        }
                     } else {
-                        echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
+                        echo "Error insertando en la tabla acompanantes: " . $conn->error;
                     }
-                    
+
                 } else {
-                    echo "Error: " . $sql2 . "<br>" . $conn->error;
+                    echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
                 }
+
+            } else {
+                echo "Error: " . $sql2 . "<br>" . $conn->error;
+            }
         }
         break;
     case 'PUT':
@@ -511,7 +510,7 @@ switch ($metodo) {
         $valor = $data['valor'];
         $nro_placa = $data['nro_placa'];
         $nombre = $apellidos . " " . $nombres;
-        $forma_pago  = $data['forma_pago'];
+        $forma_pago = $data['forma_pago'];
         $nro_adultos = $data['nro_adultos'];
         $nro_ninos = $data['nro_nino'];
         $nro_infantes = $data['nro_infantes'];
@@ -530,8 +529,8 @@ switch ($metodo) {
         $id_usuario_creacion = 0;
         $fecha_creacion = date('Y-m-d');
         // comprobar si hay algo en $id_persona con un if
-            if($id_persona === NULL || $id_persona === ""){
-                $sql2 = "INSERT INTO personanaturaljuridica (
+        if ($id_persona === NULL || $id_persona === "") {
+            $sql2 = "INSERT INTO personanaturaljuridica (
                     tipo_persona,
                     tipo_documento,
                     nro_documento,
@@ -570,11 +569,11 @@ switch ($metodo) {
                     '$id_usuario_creacion',
                     '$fecha_creacion'
                 )";
-                 //ejecutamos la consulta de sql2 con un if
-                 if($conn->query($sql2) == TRUE){
-                    echo "persona insertada <br>";
-                    $id_persona = $conn->insert_id;
-                        $insert_huesped_query = "UPDATE cheking
+            //ejecutamos la consulta de sql2 con un if
+            if ($conn->query($sql2) == TRUE) {
+                echo "persona insertada <br>";
+                $id_persona = $conn->insert_id;
+                $insert_huesped_query = "UPDATE cheking
                         SET
                             id_persona = '$id_persona',
                             tipo_de_servicio = '$tipo_de_servicio',
@@ -603,18 +602,18 @@ switch ($metodo) {
                             tipo_documento_comprobante = '$tipo_documento_comprobante',
                             sexo = '$sexo'
                         WHERE nro_documento = '$nro_documento'";
-        
-                        if ($conn->query($insert_huesped_query) === TRUE) {
-                            echo "se actualizo huesped <br>";
-                            $nro_de_orden_unico = 0;
-                            $nro_documento2 = $nro_documento;
-                            $acompanantes = $data['acompanantes'];
-                            foreach($acompanantes as $item){
-                                $apellidos_y_nombres = $item['nombre'];
-                                $edad = $item['edad'];
-                                $sexo = $item['sexo'];
-                                $parentesco = $item['parentesco'];
-                                $insert_acopanantes_query = "INSERT INTO acompanantes (
+
+                if ($conn->query($insert_huesped_query) === TRUE) {
+                    echo "se actualizo huesped <br>";
+                    $nro_de_orden_unico = 0;
+                    $nro_documento2 = $nro_documento;
+                    $acompanantes = $data['acompanantes'];
+                    foreach ($acompanantes as $item) {
+                        $apellidos_y_nombres = $item['nombre'];
+                        $edad = $item['edad'];
+                        $sexo = $item['sexo'];
+                        $parentesco = $item['parentesco'];
+                        $insert_acopanantes_query = "INSERT INTO acompanantes (
                                     nro_registro_maestro,
                                     tipo_de_servicio,
                                     nro_de_orden_unico,
@@ -627,23 +626,23 @@ switch ($metodo) {
                                 ) VALUES (
                                     '$nro_registro', '$tipo_de_servicio', '$nro_de_orden_unico', '$nro_documento2', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
                                 )";
-                                $nro_documento2 = "";
-                                $nro_de_orden_unico++;
-                                if ($conn->query($insert_acopanantes_query) === TRUE) {
-                                    echo "se inserto acompañante" . $nro_de_orden_unico;
-                                } else {
-                                    echo "Error insertando en la tabla acompanantes: " . $conn->error;
-                                }
-                            }
-        
+                        $nro_documento2 = "";
+                        $nro_de_orden_unico++;
+                        if ($conn->query($insert_acopanantes_query) === TRUE) {
+                            echo "se inserto acompañante" . $nro_de_orden_unico;
                         } else {
-                            echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
+                            echo "Error insertando en la tabla acompanantes: " . $conn->error;
                         }
-                }else{
-                    echo "Error: " . $sql2 . "<br>" . $conn->error;
+                    }
+
+                } else {
+                    echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
                 }
-            }else{
-                $sql3 = "UPDATE personanaturaljuridica
+            } else {
+                echo "Error: " . $sql2 . "<br>" . $conn->error;
+            }
+        } else {
+            $sql3 = "UPDATE personanaturaljuridica
                 SET
                 tipo_persona = '$tipo_persona',
                 tipo_documento = '$tipo_documento',
@@ -663,9 +662,9 @@ switch ($metodo) {
                 id_usuario_creacion = '$id_usuario_creacion',
                 fecha_creacion = '$fecha_creacion'
                 WHERE id_persona = '$id_persona'";
-                 if($conn->query($sql3) == TRUE){
-                   echo "persona actualizada <br>";
-                        $insert_huesped_query = "UPDATE cheking
+            if ($conn->query($sql3) == TRUE) {
+                echo "persona actualizada <br>";
+                $insert_huesped_query = "UPDATE cheking
                         SET
                         id_persona = '$id_persona',
                         tipo_de_servicio = '$tipo_de_servicio',
@@ -694,18 +693,18 @@ switch ($metodo) {
                         tipo_documento_comprobante = '$tipo_documento_comprobante',
                         sexo = '$sexo'
                         WHERE nro_documento = '$nro_documento'";
-        
-                        if ($conn->query($insert_huesped_query) === TRUE) {
-                            echo "se actualizo huesped <br>";
-                            $nro_de_orden_unico = 0;
-                            $nro_documento2 = $nro_documento;
-                            $acompanantes = $data['acompanantes'];
-                            foreach($acompanantes as $item){
-                                $apellidos_y_nombres = $item['nombre'];
-                                $edad = $item['edad'];
-                                $sexo = $item['sexo'];
-                                $parentesco = $item['parentesco'];
-                                $insert_acopanantes_query = "INSERT INTO acompanantes (
+
+                if ($conn->query($insert_huesped_query) === TRUE) {
+                    echo "se actualizo huesped <br>";
+                    $nro_de_orden_unico = 0;
+                    $nro_documento2 = $nro_documento;
+                    $acompanantes = $data['acompanantes'];
+                    foreach ($acompanantes as $item) {
+                        $apellidos_y_nombres = $item['nombre'];
+                        $edad = $item['edad'];
+                        $sexo = $item['sexo'];
+                        $parentesco = $item['parentesco'];
+                        $insert_acopanantes_query = "INSERT INTO acompanantes (
                                     nro_registro_maestro,
                                     tipo_de_servicio,
                                     nro_de_orden_unico,
@@ -718,20 +717,20 @@ switch ($metodo) {
                                 ) VALUES (
                                     '$nro_registro', '$tipo_de_servicio', '$nro_de_orden_unico', '$nro_documento2', '$nro_habitacion', '$apellidos_y_nombres', '$sexo', '$edad', '$parentesco'
                                 )";
-                                $nro_documento2 = "";
-                                $nro_de_orden_unico++;
-                                if ($conn->query($insert_acopanantes_query) === TRUE) {
-                                    echo "se inserto acompañante" . $nro_de_orden_unico;
-                                } else {
-                                    echo "Error insertando en la tabla acompanantes: " . $conn->error;
-                                }
-                            }
-        
+                        $nro_documento2 = "";
+                        $nro_de_orden_unico++;
+                        if ($conn->query($insert_acopanantes_query) === TRUE) {
+                            echo "se inserto acompañante" . $nro_de_orden_unico;
                         } else {
-                            echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
+                            echo "Error insertando en la tabla acompanantes: " . $conn->error;
                         }
+                    }
+
+                } else {
+                    echo "Error insertando en la tabla personanaturaljuridica: " . $conn->error;
                 }
             }
+        }
         break;
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'), true);
