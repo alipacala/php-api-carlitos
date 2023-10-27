@@ -696,9 +696,17 @@ switch ($metodo) {
 
                 if ($conn->query($insert_huesped_query) === TRUE) {
                     echo "se actualizo huesped <br>";
-                    $nro_de_orden_unico = 0;
+                    $nro_de_orden_unico = 1;
                     $nro_documento2 = $nro_documento;
                     $acompanantes = $data['acompanantes'];
+
+                    // borrar el primer elemento del array
+                    array_shift($acompanantes);
+
+                    // actualizarlo el acompanante titular
+                    $queryAcompanante = "UPDATE acompanantes SET apellidos_y_nombres = '$nombre', sexo = '$sexo', edad = '$edad', nro_documento = '$nro_documento'
+                     WHERE nro_registro_maestro = '$nro_registro' AND nro_orden_unico = 0";
+
                     foreach ($acompanantes as $item) {
                         $apellidos_y_nombres = $item['nombre'];
                         $edad = $item['edad'];
