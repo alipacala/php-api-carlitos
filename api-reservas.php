@@ -368,8 +368,10 @@ switch ($metodo) {
         $ano_peru = date('y');
         $nro_reserva = $data['nro_reserva'];
         $codigo = "HT" . $ano_peru;
-        $ultimo_valor = actualizarNumeroCorrelativoHotel($codigo);
+
+        $ultimo_valor = obtenerCorrelativoHotel($codigo);
         $nro_maestro = $codigo . str_pad($ultimo_valor, 6, '0', STR_PAD_LEFT);
+        actualizarNumeroCorrelativoHotel($codigo);
 
         $sql = "UPDATE reservas 
     SET nro_registro_maestro = '$nro_maestro',

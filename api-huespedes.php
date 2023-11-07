@@ -47,7 +47,11 @@ switch ($metodo) {
         $fecha_out = $data['fecha_out'];
         $nro_habitacion = $data['nro_habitacion'];
         $nro_reserva = $data['nro_reserva'];
-        $nro_registro = $data['nro_registro'];
+
+        $codigo = "HT" . date('y');
+        $correlativo = obtenerCorrelativoHotel($codigo) + 1;
+        $nro_registro = $codigo . str_pad($correlativo, 6, '0', STR_PAD_LEFT);
+
         $direccion = $data['direccion'];
         $direccion_comprobante = $data['direccion_comprobante'];
         $edad = $data['edad'];
