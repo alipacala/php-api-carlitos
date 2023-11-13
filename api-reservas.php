@@ -370,7 +370,7 @@ switch ($metodo) {
         $codigo = "HT" . $ano_peru;
 
         $ultimo_valor = obtenerCorrelativoHotel($codigo);
-        $nro_maestro = $codigo . str_pad($ultimo_valor, 6, '0', STR_PAD_LEFT);
+        $nro_maestro = $codigo . str_pad($ultimo_valor + 1, 6, '0', STR_PAD_LEFT);
         actualizarNumeroCorrelativoHotel($codigo);
 
         $sql = "UPDATE reservas 
