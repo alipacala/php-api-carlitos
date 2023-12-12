@@ -36,12 +36,20 @@ switch (ENV) {
         break;
 
     case 'vm-prod':
-    	define("DB_HOST", "localhost");
-	    define("DB_USERNAME", "root");
-	    define("DB_PASSWORD", "@dm1n123");
-	    define("DB_DATABASE_NAME", "hotelarenasspa");
-	    define("DB_PORT", 3306);
-	    break;
+        define("DB_HOST", "localhost");
+        define("DB_USERNAME", "root");
+        define("DB_PASSWORD", "@dm1n123");
+        define("DB_DATABASE_NAME", "hotelarenasspa");
+        define("DB_PORT", 3306);
+        break;
+
+    case 'prod':
+        define("DB_HOST", "localhost");
+        define("DB_USERNAME", "c1952071");
+        define("DB_PASSWORD", "vureRIni44");
+        define("DB_DATABASE_NAME", "c1952071_apitest");
+        define("DB_PORT", 3306);
+        break;
 
     default:
         break;
