@@ -1,5 +1,5 @@
 <?php
-define("ENV", "lan");
+define("ENV", "prod");
 
 // Configuración de la base de datos
 switch (ENV) {
