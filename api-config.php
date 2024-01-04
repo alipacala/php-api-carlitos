@@ -36,7 +36,7 @@ switch ($metodo) {
     break;
     case 'HOTEL':
         // Listar hotel + correlativo
-        $sql = "SELECT * FROM config WHERE id_config = 11";
+        $sql = "SELECT * FROM config WHERE id_config = 28";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $modulos = array();

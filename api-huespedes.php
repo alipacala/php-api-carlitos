@@ -49,7 +49,7 @@ switch ($metodo) {
         $nro_reserva = $data['nro_reserva'];
 
         $codigo = "HT" . date('y');
-        $correlativo = obtenerCorrelativoHotel($codigo) + 1;
+        $correlativo = obtenerCorrelativoHotel($codigo);
         $nro_registro = $codigo . str_pad($correlativo, 6, '0', STR_PAD_LEFT);
 
         $direccion = $data['direccion'];
